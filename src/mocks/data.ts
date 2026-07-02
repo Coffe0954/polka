@@ -1,0 +1,71 @@
+import { Category, Product } from "../types";
+
+export const categories: Category[] = [
+  { id: "1", name: "Электроника", icon: "📱" },
+  { id: "2", name: "Недвижимость", icon: "🏠" },
+  { id: "3", name: "Транспорт", icon: "🚗" },
+  { id: "4", name: "Работа", icon: "💼" },
+  { id: "5", name: "Услуги", icon: "🛠️" },
+  { id: "6", name: "Дом и сад", icon: "🌿" },
+  { id: "7", name: "Личные вещи", icon: "👕" },
+  { id: "8", name: "Хобби и отдых", icon: "🎸" },
+];
+
+export const products: Product[] = [
+  {
+    id: "p1",
+    title: "iPhone 15 Pro, 256GB, Natural Titanium",
+    price: 115000,
+    location: "Москва, Сити",
+    imageUrl: "https://images.unsplash.com/photo-1696446701796-da61225697cc?q=80&w=800&auto=format&fit=crop",
+    category: "Электроника",
+    createdAt: "2024-03-20T10:00:00Z",
+    isFavorite: false,
+  },
+  {
+    id: "p2",
+    title: "MacBook Pro 14 M3 Max",
+    price: 320000,
+    location: "Санкт-Петербург",
+    imageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=800&auto=format&fit=crop",
+    category: "Электроника",
+    createdAt: "2024-03-19T15:30:00Z",
+    isFavorite: true,
+  },
+  {
+    id: "p3",
+    title: "Квартира в ЖК 'Лужники Коллекшн'",
+    price: 85000000,
+    location: "Москва, Хамовники",
+    imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop",
+    category: "Недвижимость",
+    createdAt: "2024-03-18T12:00:00Z",
+  },
+  {
+    id: "p4",
+    title: "Porsche 911 Carrera S",
+    price: 18500000,
+    location: "Москва",
+    imageUrl: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=800&auto=format&fit=crop",
+    category: "Транспорт",
+    createdAt: "2024-03-21T09:00:00Z",
+  },
+  {
+    id: "p5",
+    title: "Herman Miller Aeron Onyx",
+    price: 210000,
+    location: "Казань",
+    imageUrl: "https://images.unsplash.com/photo-1580480055273-228ff5388ef8?q=80&w=800&auto=format&fit=crop",
+    category: "Дом и сад",
+    createdAt: "2024-03-17T14:20:00Z",
+  },
+  {
+    id: "p6",
+    title: "Sony PlayStation 5 Slim",
+    price: 52000,
+    location: "Екатеринбург",
+    imageUrl: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?q=80&w=800&auto=format&fit=crop",
+    category: "Электроника",
+    createdAt: "2024-03-22T11:15:00Z",
+  },
+];
