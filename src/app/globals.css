@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@theme {
+  --color-apple-bg: #f5f5f7;
+  --color-apple-card: #ffffff;
+  --color-apple-text: #1d1d1f;
+  --color-apple-text-secondary: #86868b;
+  --color-apple-accent: #0066cc;
+
+  --radius-apple: 16px;
+
+  --font-sans: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-apple-bg text-apple-text antialiased;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight font-semibold;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply backdrop-blur-md bg-white/70;
+  }
+
+  .apple-card {
+    @apply bg-apple-card rounded-apple shadow-sm hover:shadow-md transition-shadow duration-300;
+  }
+}
