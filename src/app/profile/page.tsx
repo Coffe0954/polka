@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function ProfilePage() {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, user, logout, updateUser } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -20,13 +20,15 @@ export default function ProfilePage() {
   }, [isLoggedIn, router]);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [name, setName] = useState("Александр");
-  const [tempName, setTempName] = useState("Александр");
+  const [tempName, setTempName] = useState(user?.name || "");
+  const [tempBio, setTempBio] = useState(user?.bio || "");
 
   const handleSave = () => {
-    setName(tempName);
+    updateUser({ name: tempName, bio: tempBio });
     setIsEditModalOpen(false);
   };
+
+  if (!user) return null;
 
   return (
     <div className="py-8 md:py-12 relative">
@@ -40,23 +42,36 @@ export default function ProfilePage() {
                   <User size={40} className="text-gray-400" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold">Александр</h1>
+                  <h1 className="text-2xl font-bold">{user.name}</h1>
                   <div className="flex items-center gap-1 text-apple-text-secondary mt-1">
                     <Star size={14} className="fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm font-medium">4.9 • 24 отзыва</span>
+                    <span className="text-sm font-medium">Новый продавец</span>
                   </div>
                 </div>
               </div>
 
+              {user.bio && (
+                <p className="text-sm text-apple-text-secondary mb-6 line-clamp-3">
+                  {user.bio}
+                </p>
+              )}
+
               <div className="space-y-4 pt-4 border-t border-gray-50">
                 <div className="flex justify-between text-sm">
                   <span className="text-apple-text-secondary">На Полке с</span>
-                  <span className="font-medium">Марта 2022</span>
+                  <span className="font-medium">{user.joinedDate}</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-green-600">
-                  <span className="text-sm font-semibold">Подтвержденный аккаунт</span>
-                  <CheckCircle size={14} className="fill-green-600 text-white" />
-                </div>
+                {user.isVerified ? (
+                  <div className="flex items-center gap-1.5 text-green-600">
+                    <span className="text-sm font-semibold">Подтвержденный аккаунт</span>
+                    <CheckCircle size={14} className="fill-green-600 text-white" />
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1.5 text-red-500">
+                    <span className="text-sm font-semibold">Профиль не подтвержден</span>
+                    <X size={14} className="fill-red-500 text-white rounded-full p-0.5" />
+                  </div>
+                )}
               </div>
 
               <Button
@@ -157,6 +172,8 @@ export default function ProfilePage() {
                     О себе
                   </label>
                   <textarea
+                    value={tempBio}
+                    onChange={(e) => setTempBio(e.target.value)}
                     placeholder="Расскажите немного о себе"
                     className="w-full p-4 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-apple-blue/20 text-sm min-h-[100px] resize-none"
                   />

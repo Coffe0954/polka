@@ -15,7 +15,8 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    login();
+    // Simulate login with unverified status to demonstrate the request
+    login({ isVerified: false });
     router.push("/profile");
   };
 
