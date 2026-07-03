@@ -1,13 +1,32 @@
 "use client";
 
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { Search, MapPin, Plus, User, Heart } from "lucide-react";
+import { Search, MapPin, Plus, User, Heart, X } from "lucide-react";
 import { Container } from "../ui/Container";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
+import { POPULAR_CITIES } from "@/mocks/cities";
 
 export function Header() {
+  const [isCityModalOpen, setIsCityModalOpen] = useState(false);
+  const [selectedCity, setSelectedCity] = useState("Москва");
+  const [citySearch, setCitySearch] = useState("");
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const filteredCities = POPULAR_CITIES.filter(city =>
+    city.toLowerCase().includes(citySearch.toLowerCase())
+  );
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsCityModalOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-100 glass">
       <Container className="flex h-16 items-center justify-between gap-4 md:h-20">
@@ -25,10 +44,56 @@ export function Header() {
               className="pl-11 bg-gray-100/50 border-none h-10 rounded-full"
             />
           </div>
-          <button className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-apple-text-secondary hover:text-apple-text transition-colors whitespace-nowrap">
-            <MapPin className="h-4 w-4" />
-            Москва
-          </button>
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setIsCityModalOpen(!isCityModalOpen)}
+              className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-apple-text-secondary hover:text-apple-text transition-colors whitespace-nowrap"
+            >
+              <MapPin className="h-4 w-4" />
+              {selectedCity}
+            </button>
+
+            {isCityModalOpen && (
+              <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden animate-in fade-in zoom-in duration-200 z-[60]">
+                <div className="p-3 border-b border-gray-50">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                    <input
+                      autoFocus
+                      type="text"
+                      placeholder="Поиск города..."
+                      value={citySearch}
+                      onChange={(e) => setCitySearch(e.target.value)}
+                      className="w-full pl-9 pr-3 py-2 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-apple-blue/20"
+                    />
+                  </div>
+                </div>
+                <div className="max-h-60 overflow-y-auto p-1">
+                  {filteredCities.length > 0 ? (
+                    filteredCities.map(city => (
+                      <button
+                        key={city}
+                        onClick={() => {
+                          setSelectedCity(city);
+                          setIsCityModalOpen(false);
+                          setCitySearch("");
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                          selectedCity === city
+                            ? "bg-apple-blue/5 text-apple-blue font-semibold"
+                            : "hover:bg-gray-50 text-apple-text-secondary hover:text-apple-text"
+                        }`}
+                      >
+                        {city}
+                      </button>
+                    ))
+                  ) : (
+                    <div className="p-4 text-center text-xs text-gray-400">Ничего не найдено</div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">

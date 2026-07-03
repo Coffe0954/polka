@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Allow any origin for development preview
+  allowedDevOrigins: ["*"],
 };
 
 export default nextConfig;

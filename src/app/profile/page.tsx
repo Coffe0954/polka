@@ -1,10 +1,23 @@
+"use client";
+
+import React, { useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { User, Package, Heart, Archive, Star } from "lucide-react";
+import { Input } from "@/components/ui/Input";
+import { User, Package, Heart, Star, CheckCircle, X, Camera } from "lucide-react";
 
 export default function ProfilePage() {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [name, setName] = useState("Александр");
+  const [tempName, setTempName] = useState("Александр");
+
+  const handleSave = () => {
+    setName(tempName);
+    setIsEditModalOpen(false);
+  };
+
   return (
-    <div className="py-8 md:py-12">
+    <div className="py-8 md:py-12 relative">
       <Container>
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar / User Info */}
@@ -28,13 +41,17 @@ export default function ProfilePage() {
                   <span className="text-apple-text-secondary">На Полке с</span>
                   <span className="font-medium">Марта 2022</span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-apple-text-secondary">Проверено</span>
-                  <span className="text-green-600 font-medium">Паспорт, Телефон</span>
+                <div className="flex items-center gap-1.5 text-green-600">
+                  <span className="text-sm font-semibold">Подтвержденный аккаунт</span>
+                  <CheckCircle size={14} className="fill-green-600 text-white" />
                 </div>
               </div>
 
-              <Button variant="outline" className="w-full mt-8">
+              <Button
+                variant="outline"
+                className="w-full mt-8"
+                onClick={() => setIsEditModalOpen(true)}
+              >
                 Редактировать профиль
               </Button>
             </div>
@@ -66,6 +83,81 @@ export default function ProfilePage() {
           </main>
         </div>
       </Container>
+
+      {/* Edit Profile Modal */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div
+            className="bg-white w-full max-w-md rounded-[32px] p-8 shadow-2xl animate-in slide-in-from-bottom-8 duration-300"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold tracking-tight">Редактировать профиль</h2>
+              <button
+                onClick={() => setIsEditModalOpen(false)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              <div className="flex flex-col items-center gap-4">
+                <div className="relative group">
+                  <div className="h-24 w-24 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-2 border-white shadow-md">
+                    <User size={48} className="text-gray-400" />
+                  </div>
+                  <button className="absolute inset-0 bg-black/20 text-white flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Camera size={24} />
+                  </button>
+                </div>
+                <button className="text-sm font-medium text-apple-blue hover:underline">
+                  Изменить фото
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-apple-text-secondary uppercase tracking-wider mb-2 ml-1">
+                    Имя
+                  </label>
+                  <Input
+                    value={tempName}
+                    onChange={(e) => setTempName(e.target.value)}
+                    placeholder="Ваше имя"
+                    className="h-12 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-apple-blue/20"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-apple-text-secondary uppercase tracking-wider mb-2 ml-1">
+                    О себе
+                  </label>
+                  <textarea
+                    placeholder="Расскажите немного о себе"
+                    className="w-full p-4 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-apple-blue/20 text-sm min-h-[100px] resize-none"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <Button
+                  variant="secondary"
+                  className="flex-1 rounded-2xl h-12"
+                  onClick={() => setIsEditModalOpen(false)}
+                >
+                  Отмена
+                </Button>
+                <Button
+                  className="flex-1 rounded-2xl h-12"
+                  onClick={handleSave}
+                >
+                  Сохранить
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
