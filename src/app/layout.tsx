@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 import { AuthProvider } from "@/lib/auth-context";
+import { ToastProvider } from "@/lib/toast-context";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,8 +19,11 @@ export default function RootLayout({
     <html lang="ru">
       <body className="min-h-screen antialiased">
         <AuthProvider>
-          <Header />
-          <main>{children}</main>
+          <ToastProvider>
+            <Header />
+            <main className="min-h-[calc(100vh-200px)]">{children}</main>
+            <Footer />
+          </ToastProvider>
         </AuthProvider>
       </body>
     </html>

@@ -3,12 +3,15 @@ import Image from "next/image";
 import { Heart, MapPin } from "lucide-react";
 import { Product } from "@/types";
 import { Button } from "../ui/Button";
+import { motion } from "framer-motion";
+import { useToast } from "@/lib/toast-context";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const { showToast } = useToast();
   const formattedPrice = new Intl.NumberFormat("ru-RU", {
     style: "currency",
     currency: "RUB",
@@ -16,7 +19,12 @@ export function ProductCard({ product }: ProductCardProps) {
   }).format(product.price);
 
   return (
-    <div className="apple-card group flex flex-col h-full overflow-hidden">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="apple-card group flex flex-col h-full overflow-hidden hover:shadow-2xl hover:shadow-black/5 transition-shadow duration-300"
+    >
       <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
         <Image
           src={product.imageUrl}
@@ -28,6 +36,10 @@ export function ProductCard({ product }: ProductCardProps) {
         <Button
           variant="ghost"
           size="icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            showToast("Добавлено в избранное", "success");
+          }}
           className="absolute right-2 top-2 h-9 w-9 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white text-apple-text-secondary hover:text-red-500"
         >
           <Heart className={product.isFavorite ? "fill-red-500 text-red-500" : ""} size={18} />
@@ -45,6 +57,6 @@ export function ProductCard({ product }: ProductCardProps) {
           <span>{product.location}</span>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
