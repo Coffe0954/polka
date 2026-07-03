@@ -1,7 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { CategoryGrid } from "@/components/features/CategoryGrid";
 import { ProductCard } from "@/components/features/ProductCard";
-import { categories, products } from "@/mocks/data";
+import { CATEGORIES, MOCK_PRODUCTS } from "@/mocks/data";
 
 export default function Home() {
   return (
@@ -9,7 +9,7 @@ export default function Home() {
       <Container>
         {/* Categories Section */}
         <section className="mt-4 md:mt-8">
-          <CategoryGrid categories={categories} />
+          <CategoryGrid categories={CATEGORIES} />
         </section>
 
         {/* Hero / Recommendation Title */}
@@ -21,7 +21,7 @@ export default function Home() {
 
         {/* Product Grid */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.map((product) => (
+          {MOCK_PRODUCTS.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </section>

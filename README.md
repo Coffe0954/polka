@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Маркетплейс «Полка» (MVP)
 
-## Getting Started
+Это прототип маркетплейса, вдохновленный дизайном Apple. Проект выполнен в рамках стратегии Frontend-First с использованием Next.js 16 и Tailwind CSS v4.
 
-First, run the development server:
+## 🚀 Быстрый старт
 
+Чтобы запустить проект на вашем компьютере, следуйте этим шагам:
+
+### 1. Требования
+Убедитесь, что у вас установлена актуальная версия Node.js (рекомендуется **Node 20** или выше).
+Вы можете проверить версию командой:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+node -v
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Установка зависимостей
+Склонируйте репозиторий (или скачайте файлы) и выполните в терминале:
+```bash
+npm install
+```
+*Если возникнут ошибки, связанные с версиями зависимостей, используйте:*
+```bash
+npm install --legacy-peer-deps
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Запуск сервера разработки
+```bash
+npm run dev
+```
+После запуска проект будет доступен по адресу [http://localhost:3000](http://localhost:3000).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠 Технологический стек
+- **Next.js 16.2** (App Router)
+- **React 19**
+- **Tailwind CSS 4.0** (Новая версия с поддержкой JIT и CSS-переменных)
+- **TypeScript**
+- **Lucide React** (Иконки)
 
-## Learn More
+## 📁 Структура проекта
+- `src/app` — Страницы и роутинг.
+- `src/components/ui` — Базовые UI-компоненты (кнопки, инпуты).
+- `src/components/layout` — Глобальные элементы (шапка сайта).
+- `src/features` — Функциональные блоки (Личный кабинет, Форма подачи объявления).
+- `src/mocks` — Тестовые данные для витрины.
+- `src/types` — TypeScript интерфейсы.
 
-To learn more about Next.js, take a look at the following resources:
+## 🎨 Дизайн-код
+Проект строго следует Apple Design Guidelines:
+- Фон: алюминиевый серый `#f5f5f7`
+- Текст: угольный `#1d1d1f`
+- Акценты: синий `#0066cc`
+- Скругления: `16px` (rounded-2xl)
+- Эффекты: Glassmorphism (backdrop-blur)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ⚠️ Устранение проблем
+- **Порт занят:** Если вы видите ошибку `Port 3000 is already in use`, запустите проект на другом порту: `npm run dev -- -p 3001`.
+- **Изображения не грузятся:** Убедитесь, что у вас есть доступ к интернету (фото подгружаются с Unsplash).
