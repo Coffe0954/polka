@@ -1,11 +1,24 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { ArrowLeft } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const { login } = useAuth();
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    login();
+    router.push("/profile");
+  };
+
   return (
     <div className="min-h-[calc(100vh-80px)] flex items-center justify-center py-12">
       <Container className="max-w-md">
@@ -23,7 +36,7 @@ export default function RegisterPage() {
             Присоединяйтесь к сообществу Полки сегодня.
           </p>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-xs font-semibold text-apple-text-secondary uppercase tracking-wider mb-2 ml-1">
                 Имя
@@ -61,7 +74,7 @@ export default function RegisterPage() {
               <button type="button" className="text-apple-blue hover:underline">Политикой конфиденциальности</button>.
             </p>
 
-            <Button className="w-full h-12 rounded-2xl text-base font-semibold mt-4">
+            <Button type="submit" className="w-full h-12 rounded-2xl text-base font-semibold mt-4">
               Зарегистрироваться
             </Button>
           </form>

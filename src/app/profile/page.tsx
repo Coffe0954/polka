@@ -4,9 +4,21 @@ import React, { useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { User, Package, Heart, Star, CheckCircle, X, Camera } from "lucide-react";
+import { User, Package, Heart, Star, CheckCircle, X, Camera, LogOut } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function ProfilePage() {
+  const { isLoggedIn, logout } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.push("/login");
+    }
+  }, [isLoggedIn, router]);
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [name, setName] = useState("Александр");
   const [tempName, setTempName] = useState("Александр");
@@ -53,6 +65,18 @@ export default function ProfilePage() {
                 onClick={() => setIsEditModalOpen(true)}
               >
                 Редактировать профиль
+              </Button>
+
+              <Button
+                variant="ghost"
+                className="w-full mt-2 text-red-500 hover:text-red-600 hover:bg-red-50 gap-2"
+                onClick={() => {
+                  logout();
+                  router.push("/");
+                }}
+              >
+                <LogOut size={16} />
+                Выйти
               </Button>
             </div>
           </aside>

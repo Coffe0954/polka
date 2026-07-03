@@ -2,13 +2,15 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { Search, MapPin, Plus, User, Heart, X } from "lucide-react";
+import { Search, MapPin, Plus, User, Heart, X, LogIn } from "lucide-react";
 import { Container } from "../ui/Container";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { POPULAR_CITIES } from "@/mocks/cities";
+import { useAuth } from "@/lib/auth-context";
 
 export function Header() {
+  const { isLoggedIn } = useAuth();
   const [isCityModalOpen, setIsCityModalOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState("Москва");
   const [citySearch, setCitySearch] = useState("");
@@ -97,27 +99,48 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
-          <Link href="/favorites" className="md:hidden">
-            <Button variant="ghost" size="icon">
-              <Heart className="h-5 w-5" />
-            </Button>
-          </Link>
-          <Link href="/create" className="hidden md:block">
-            <Button size="md" className="gap-2">
-              <Plus className="h-4 w-4" />
-              Подать объявление
-            </Button>
-          </Link>
-          <Link href="/create" className="md:hidden">
-            <Button size="icon" className="h-10 w-10">
-              <Plus className="h-5 w-5" />
-            </Button>
-          </Link>
-          <Link href="/profile">
-            <Button variant="secondary" size="icon" className="rounded-full bg-gray-100">
-              <User className="h-5 w-5" />
-            </Button>
-          </Link>
+          {isLoggedIn ? (
+            <>
+              <Link href="/favorites" className="hidden md:block">
+                <Button variant="ghost" size="icon">
+                  <Heart className="h-5 w-5" />
+                </Button>
+              </Link>
+              <Link href="/create" className="hidden md:block">
+                <Button size="md" className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Подать объявление
+                </Button>
+              </Link>
+              <Link href="/create" className="md:hidden">
+                <Button size="icon" className="h-10 w-10">
+                  <Plus className="h-5 w-5" />
+                </Button>
+              </Link>
+              <Link href="/profile">
+                <Button variant="secondary" size="icon" className="rounded-full bg-gray-100">
+                  <User className="h-5 w-5" />
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/login">
+                <Button variant="ghost" className="hidden md:flex gap-2">
+                  <LogIn className="h-4 w-4" />
+                  Войти
+                </Button>
+              </Link>
+              <Link href="/login" className="md:hidden">
+                <Button variant="secondary" size="icon" className="rounded-full bg-gray-100">
+                  <User className="h-5 w-5" />
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button size="md">Регистрация</Button>
+              </Link>
+            </>
+          )}
         </div>
       </Container>
 
