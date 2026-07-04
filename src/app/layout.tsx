@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { AuthProvider } from "@/lib/auth-context";
+import { AuthenticationProvider } from "@/lib/auth-context";
 import { ToastProvider } from "@/lib/toast-context";
 import "./globals.css";
 
@@ -17,14 +17,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className="min-h-screen antialiased">
-        <AuthProvider>
+      <body className="min-h-screen antialiased font-sans">
+        <AuthenticationProvider>
           <ToastProvider>
             <Header />
             <main className="min-h-[calc(100vh-200px)]">{children}</main>
             <Footer />
           </ToastProvider>
-        </AuthProvider>
+        </AuthenticationProvider>
       </body>
     </html>
   );

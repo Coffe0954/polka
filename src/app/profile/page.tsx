@@ -5,30 +5,30 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { User, Package, Heart, Star, CheckCircle, X, Camera, LogOut } from "lucide-react";
-import { useAuth } from "@/lib/auth-context";
+import { useAuthentication } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function ProfilePage() {
-  const { isLoggedIn, user, logout, updateUser } = useAuth();
+  const { isAuthenticated, currentUser, signOut, updateProfile } = useAuthentication();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isAuthenticated) {
       router.push("/login");
     }
-  }, [isLoggedIn, router]);
+  }, [isAuthenticated, router]);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [tempName, setTempName] = useState(user?.name || "");
-  const [tempBio, setTempBio] = useState(user?.bio || "");
+  const [editingName, setEditingName] = useState(currentUser?.fullName || "");
+  const [editingBio, setEditingBio] = useState(currentUser?.bio || "");
 
-  const handleSave = () => {
-    updateUser({ name: tempName, bio: tempBio });
+  const handleProfileSave = () => {
+    updateProfile({ fullName: editingName, bio: editingBio });
     setIsEditModalOpen(false);
   };
 
-  if (!user) return null;
+  if (!currentUser) return null;
 
   return (
     <div className="py-8 md:py-12 relative">
@@ -42,7 +42,7 @@ export default function ProfilePage() {
                   <User size={40} className="text-gray-400" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold">{user.name}</h1>
+                  <h1 className="text-2xl font-bold">{currentUser.fullName}</h1>
                   <div className="flex items-center gap-1 text-apple-text-secondary mt-1">
                     <Star size={14} className="fill-yellow-400 text-yellow-400" />
                     <span className="text-sm font-medium">Новый продавец</span>
@@ -50,18 +50,18 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              {user.bio && (
+              {currentUser.bio && (
                 <p className="text-sm text-apple-text-secondary mb-6 line-clamp-3">
-                  {user.bio}
+                  {currentUser.bio}
                 </p>
               )}
 
               <div className="space-y-4 pt-4 border-t border-gray-50">
                 <div className="flex justify-between text-sm">
                   <span className="text-apple-text-secondary">На Полке с</span>
-                  <span className="font-medium">{user.joinedDate}</span>
+                  <span className="font-medium">{currentUser.registrationDate}</span>
                 </div>
-                {user.isVerified ? (
+                {currentUser.isAccountVerified ? (
                   <div className="flex items-center gap-1.5 text-green-600">
                     <span className="text-sm font-semibold">Подтвержденный аккаунт</span>
                     <CheckCircle size={14} className="fill-green-600 text-white" />
@@ -86,7 +86,7 @@ export default function ProfilePage() {
                 variant="ghost"
                 className="w-full mt-2 text-red-500 hover:text-red-600 hover:bg-red-50 gap-2"
                 onClick={() => {
-                  logout();
+                  signOut();
                   router.push("/");
                 }}
               >
@@ -161,8 +161,8 @@ export default function ProfilePage() {
                     Имя
                   </label>
                   <Input
-                    value={tempName}
-                    onChange={(e) => setTempName(e.target.value)}
+                    value={editingName}
+                    onChange={(e) => setEditingName(e.target.value)}
                     placeholder="Ваше имя"
                     className="h-12 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-apple-blue/20"
                   />
@@ -172,8 +172,8 @@ export default function ProfilePage() {
                     О себе
                   </label>
                   <textarea
-                    value={tempBio}
-                    onChange={(e) => setTempBio(e.target.value)}
+                    value={editingBio}
+                    onChange={(e) => setEditingBio(e.target.value)}
                     placeholder="Расскажите немного о себе"
                     className="w-full p-4 rounded-2xl bg-gray-50 border-none focus:ring-2 focus:ring-apple-blue/20 text-sm min-h-[100px] resize-none"
                   />
@@ -190,7 +190,7 @@ export default function ProfilePage() {
                 </Button>
                 <Button
                   className="flex-1 rounded-2xl h-12"
-                  onClick={handleSave}
+                  onClick={handleProfileSave}
                 >
                   Сохранить
                 </Button>

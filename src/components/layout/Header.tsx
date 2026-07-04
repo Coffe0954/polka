@@ -7,10 +7,10 @@ import { Container } from "../ui/Container";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { POPULAR_CITIES } from "@/mocks/cities";
-import { useAuth } from "@/lib/auth-context";
+import { useAuthentication } from "@/lib/auth-context";
 
 export function Header() {
-  const { isLoggedIn } = useAuth();
+  const { isAuthenticated } = useAuthentication();
   const [isCityModalOpen, setIsCityModalOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState("Москва");
   const [citySearch, setCitySearch] = useState("");
@@ -98,9 +98,9 @@ export function Header() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 md:gap-4">
-          {isLoggedIn ? (
-            <>
+        <nav className="flex items-center gap-2 md:gap-4" aria-label="Панель пользователя">
+          {isAuthenticated ? (
+            <div className="flex items-center gap-2 md:gap-4">
               <Link href="/favorites" className="hidden md:block">
                 <Button variant="ghost" size="icon">
                   <Heart className="h-5 w-5" />
@@ -117,14 +117,14 @@ export function Header() {
                   <Plus className="h-5 w-5" />
                 </Button>
               </Link>
-              <Link href="/profile">
+              <Link href="/profile" aria-label="Личный кабинет">
                 <Button variant="secondary" size="icon" className="rounded-full bg-gray-100">
                   <User className="h-5 w-5" />
                 </Button>
               </Link>
-            </>
+            </div>
           ) : (
-            <>
+            <div className="flex items-center gap-2 md:gap-4">
               <Link href="/login">
                 <Button variant="ghost" className="hidden md:flex gap-2">
                   <LogIn className="h-4 w-4" />
@@ -139,9 +139,9 @@ export function Header() {
               <Link href="/register">
                 <Button size="md">Регистрация</Button>
               </Link>
-            </>
+            </div>
           )}
-        </div>
+        </nav>
       </Container>
 
       {/* Mobile Search Bar */}
