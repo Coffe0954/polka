@@ -11,77 +11,79 @@ import { useAuthentication } from "@/lib/auth-context";
 
 export function Header() {
   const { isAuthenticated } = useAuthentication();
-  const [isCityModalOpen, setIsCityModalOpen] = useState(false);
-  const [selectedCity, setSelectedCity] = useState("Москва");
-  const [citySearch, setCitySearch] = useState("");
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isCityDropdownVisible, setIsCityDropdownVisible] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState("Москва");
+  const [locationSearchQuery, setLocationSearchQuery] = useState("");
+  const cityDropdownRef = useRef<HTMLDivElement>(null);
 
-  const filteredCities = POPULAR_CITIES.filter(city =>
-    city.toLowerCase().includes(citySearch.toLowerCase())
+  const filteredCityList = POPULAR_CITIES.filter(city =>
+    city.toLowerCase().includes(locationSearchQuery.toLowerCase())
   );
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsCityModalOpen(false);
+    function handleOutsideClick(event: MouseEvent) {
+      if (cityDropdownRef.current && !cityDropdownRef.current.contains(event.target as Node)) {
+        setIsCityDropdownVisible(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-100 glass">
+    <header className="navigation-blur-header">
       <Container className="flex h-16 items-center justify-between gap-4 md:h-20">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="app-branding-logo flex items-center gap-2">
           <span className="text-2xl font-bold tracking-tight text-apple-text">
             Полка
           </span>
         </Link>
 
-        <div className="hidden flex-1 items-center gap-4 md:flex lg:ml-8 lg:mr-8">
-          <div className="relative w-full">
+        <div className="search-and-location-actions hidden flex-1 items-center gap-4 md:flex lg:ml-8 lg:mr-8">
+          <div className="global-search-bar relative w-full">
             <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-apple-text-secondary" />
             <Input
               placeholder="Поиск объявлений"
-              className="pl-11 bg-gray-100/50 border-none h-10 rounded-full"
+              className="search-input-field pl-11 bg-gray-100/50 border-none h-10 rounded-full"
             />
           </div>
-          <div className="relative" ref={dropdownRef}>
+
+          <div className="city-selector-container relative" ref={cityDropdownRef}>
             <button
-              onClick={() => setIsCityModalOpen(!isCityModalOpen)}
-              className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-apple-text-secondary hover:text-apple-text transition-colors whitespace-nowrap"
+              onClick={() => setIsCityDropdownVisible(!isCityDropdownVisible)}
+              className="location-trigger-button flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-apple-text-secondary hover:text-apple-text transition-colors whitespace-nowrap"
             >
               <MapPin className="h-4 w-4" />
-              {selectedCity}
+              {selectedLocation}
             </button>
 
-            {isCityModalOpen && (
-              <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden animate-in fade-in zoom-in duration-200 z-[60]">
-                <div className="p-3 border-b border-gray-50">
+            {isCityDropdownVisible && (
+              <div className="city-selection-dropdown absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[60]">
+                <div className="dropdown-search-header p-3 border-b border-gray-50">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
                     <input
                       autoFocus
                       type="text"
                       placeholder="Поиск города..."
-                      value={citySearch}
-                      onChange={(e) => setCitySearch(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-apple-blue/20"
+                      value={locationSearchQuery}
+                      onChange={(e) => setLocationSearchQuery(e.target.value)}
+                      className="city-search-input w-full pl-9 pr-3 py-2 bg-gray-50 rounded-xl text-sm focus:outline-none"
                     />
                   </div>
                 </div>
-                <div className="max-h-60 overflow-y-auto p-1">
-                  {filteredCities.length > 0 ? (
-                    filteredCities.map(city => (
+                <div className="city-results-list max-h-60 overflow-y-auto p-1">
+                  {filteredCityList.length > 0 ? (
+                    filteredCityList.map(city => (
                       <button
                         key={city}
                         onClick={() => {
-                          setSelectedCity(city);
-                          setIsCityModalOpen(false);
-                          setCitySearch("");
+                          setSelectedLocation(city);
+                          setIsCityDropdownVisible(false);
+                          setLocationSearchQuery("");
                         }}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                          selectedCity === city
+                        className={`city-option-item w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                          selectedLocation === city
                             ? "bg-apple-blue/5 text-apple-blue font-semibold"
                             : "hover:bg-gray-50 text-apple-text-secondary hover:text-apple-text"
                         }`}
@@ -90,7 +92,7 @@ export function Header() {
                       </button>
                     ))
                   ) : (
-                    <div className="p-4 text-center text-xs text-gray-400">Ничего не найдено</div>
+                    <div className="no-results-message p-4 text-center text-xs text-gray-400">Ничего не найдено</div>
                   )}
                 </div>
               </div>
@@ -98,45 +100,45 @@ export function Header() {
           </div>
         </div>
 
-        <nav className="flex items-center gap-2 md:gap-4" aria-label="Панель пользователя">
+        <nav className="user-navigation-menu flex items-center gap-2 md:gap-4" aria-label="Панель пользователя">
           {isAuthenticated ? (
-            <div className="flex items-center gap-2 md:gap-4">
-              <Link href="/favorites" className="hidden md:block">
+            <div className="authenticated-user-actions flex items-center gap-2 md:gap-4">
+              <Link href="/favorites" className="favorites-link hidden md:block" aria-label="Избранное">
                 <Button variant="ghost" size="icon">
                   <Heart className="h-5 w-5" />
                 </Button>
               </Link>
-              <Link href="/create" className="hidden md:block">
+              <Link href="/create" className="create-ad-link hidden md:block">
                 <Button size="md" className="gap-2">
                   <Plus className="h-4 w-4" />
                   Подать объявление
                 </Button>
               </Link>
-              <Link href="/create" className="md:hidden">
+              <Link href="/create" className="create-ad-link-mobile md:hidden">
                 <Button size="icon" className="h-10 w-10">
                   <Plus className="h-5 w-5" />
                 </Button>
               </Link>
-              <Link href="/profile" aria-label="Личный кабинет">
+              <Link href="/profile" className="user-profile-link" aria-label="Личный кабинет">
                 <Button variant="secondary" size="icon" className="rounded-full bg-gray-100">
                   <User className="h-5 w-5" />
                 </Button>
               </Link>
             </div>
           ) : (
-            <div className="flex items-center gap-2 md:gap-4">
-              <Link href="/login">
+            <div className="guest-user-actions flex items-center gap-2 md:gap-4">
+              <Link href="/login" className="login-link">
                 <Button variant="ghost" className="hidden md:flex gap-2">
                   <LogIn className="h-4 w-4" />
                   Войти
                 </Button>
               </Link>
-              <Link href="/login" className="md:hidden">
+              <Link href="/login" className="login-link-mobile md:hidden">
                 <Button variant="secondary" size="icon" className="rounded-full bg-gray-100">
                   <User className="h-5 w-5" />
                 </Button>
               </Link>
-              <Link href="/register">
+              <Link href="/register" className="registration-link">
                 <Button size="md">Регистрация</Button>
               </Link>
             </div>
@@ -144,13 +146,13 @@ export function Header() {
         </nav>
       </Container>
 
-      {/* Mobile Search Bar */}
-      <Container className="pb-3 md:hidden">
+      {/* Mobile-only secondary search bar */}
+      <Container className="mobile-search-section pb-3 md:hidden">
         <div className="relative w-full">
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-apple-text-secondary" />
           <Input
             placeholder="Поиск объявлений"
-            className="pl-11 bg-gray-100/50 border-none h-10 rounded-full"
+            className="mobile-search-input pl-11 bg-gray-100/50 border-none h-10 rounded-full"
           />
         </div>
       </Container>
