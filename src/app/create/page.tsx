@@ -5,21 +5,21 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Upload, ChevronRight, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useAuth } from "@/lib/auth-context";
+import { useAuthentication } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/lib/toast-context";
 
 export default function CreateAdPage() {
-  const { isLoggedIn } = useAuth();
+  const { isAuthenticated } = useAuthentication();
   const { showToast } = useToast();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isAuthenticated) {
       router.push("/login");
     }
-  }, [isLoggedIn, router]);
+  }, [isAuthenticated, router]);
 
   const [step, setStep] = useState(1);
 

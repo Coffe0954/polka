@@ -2,82 +2,115 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-interface UserData {
-  name: string;
+/**
+ * Interface representing user profile information.
+ */
+export interface UserProfile {
+  fullName: string;
   email: string;
-  isVerified: boolean;
-  avatar?: string;
+  isAccountVerified: boolean;
+  avatarUrl?: string;
   bio?: string;
-  joinedDate: string;
+  registrationDate: string;
 }
 
-interface AuthContextType {
-  isLoggedIn: boolean;
-  user: UserData | null;
-  login: (userData?: Partial<UserData>) => void;
-  logout: () => void;
-  updateUser: (newData: Partial<UserData>) => void;
+/**
+ * Structure of the authentication context.
+ */
+interface AuthenticationContextType {
+  isAuthenticated: boolean;
+  currentUser: UserProfile | null;
+  signIn: (profileData?: Partial<UserProfile>) => void;
+  signOut: () => void;
+  updateProfile: (updatedData: Partial<UserProfile>) => void;
 }
 
-const DEFAULT_USER: UserData = {
-  name: "Пользователь",
+const DEFAULT_GUEST_USER: UserProfile = {
+  fullName: "Пользователь",
   email: "user@example.com",
-  isVerified: false,
-  joinedDate: "Июнь 2024",
+  isAccountVerified: false,
+  registrationDate: "", // Will be set on login
 };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthenticationContext = createContext<AuthenticationContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<UserData | null>(null);
+/**
+ * Formats the current date into "Month Year" string in Russian.
+ */
+const getCurrentRussianDate = () => {
+  const months = [
+    "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+    "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+  ];
+  const now = new Date();
+  return `${months[now.getMonth()]} ${now.getFullYear()}`;
+};
+
+export function AuthenticationProvider({ children }: { children: React.ReactNode }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
 
   useEffect(() => {
-    const status = localStorage.getItem("isLoggedIn") === "true";
-    const storedUser = localStorage.getItem("userData");
+    const authStatus = localStorage.getItem("app_is_authenticated") === "true";
+    const savedProfile = localStorage.getItem("app_user_profile");
 
-    setIsLoggedIn(status);
-    if (status && storedUser) {
-      setUser(JSON.parse(storedUser));
-    } else if (status) {
-      setUser(DEFAULT_USER);
+    setIsAuthenticated(authStatus);
+    if (authStatus && savedProfile) {
+      setCurrentUser(JSON.parse(savedProfile));
+    } else if (authStatus) {
+      setCurrentUser({ ...DEFAULT_GUEST_USER, registrationDate: getCurrentRussianDate() });
     }
   }, []);
 
-  const login = (userData?: Partial<UserData>) => {
-    const newUser = { ...DEFAULT_USER, ...userData };
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("userData", JSON.stringify(newUser));
-    setIsLoggedIn(true);
-    setUser(newUser);
+  const signIn = (profileData?: Partial<UserProfile>) => {
+    const newUserProfile: UserProfile = {
+      ...DEFAULT_GUEST_USER,
+      ...profileData,
+      registrationDate: profileData?.registrationDate || getCurrentRussianDate()
+    };
+
+    localStorage.setItem("app_is_authenticated", "true");
+    localStorage.setItem("app_user_profile", JSON.stringify(newUserProfile));
+
+    setIsAuthenticated(true);
+    setCurrentUser(newUserProfile);
   };
 
-  const logout = () => {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userData");
-    setIsLoggedIn(false);
-    setUser(null);
+  const signOut = () => {
+    localStorage.removeItem("app_is_authenticated");
+    localStorage.removeItem("app_user_profile");
+    setIsAuthenticated(false);
+    setCurrentUser(null);
   };
 
-  const updateUser = (newData: Partial<UserData>) => {
-    if (user) {
-      const updatedUser = { ...user, ...newData };
-      setUser(updatedUser);
-      localStorage.setItem("userData", JSON.stringify(updatedUser));
+  const updateProfile = (updatedData: Partial<UserProfile>) => {
+    if (currentUser) {
+      const updatedProfile = { ...currentUser, ...updatedData };
+      setCurrentUser(updatedProfile);
+      localStorage.setItem("app_user_profile", JSON.stringify(updatedProfile));
     }
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, login, logout, updateUser }}>
+    <AuthenticationContext.Provider value={{
+      isAuthenticated,
+      currentUser,
+      signIn,
+      signOut,
+      updateProfile
+    }}>
       {children}
-    </AuthContext.Provider>
+    </AuthenticationContext.Provider>
   );
 }
 
-export function useAuth() {
-  const context = useContext(AuthContext);
+/**
+ * Hook to access authentication and user profile data.
+ */
+export function useAuthentication() {
+  const context = useContext(AuthenticationContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error("useAuthentication must be used within an AuthenticationProvider");
   }
   return context;
 }

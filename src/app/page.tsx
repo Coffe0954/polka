@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/Button";
 
 export default function Home() {
   return (
-    <div className="pb-20">
+    <div className="pb-20 bg-apple-bg">
       {/* Hero Section */}
       <section className="relative h-[400px] md:h-[500px] w-full overflow-hidden bg-[#1d1d1f] text-white">
         <Container className="relative z-10 flex h-full flex-col justify-center">
@@ -50,14 +50,14 @@ export default function Home() {
       </section>
 
       <Container>
-        {/* Categories Section */}
+        {/* Categories Grid Container */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
           className="mt-[-40px] relative z-20"
         >
-          <div className="bg-white/80 backdrop-blur-2xl rounded-[32px] p-6 shadow-2xl shadow-black/5 border border-white">
+          <div className="bg-white/70 backdrop-blur-3xl rounded-[24px] p-4 shadow-xl shadow-black/5 border border-white/40">
             <CategoryGrid categories={CATEGORIES} />
           </div>
         </motion.section>

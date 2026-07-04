@@ -6,19 +6,19 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { ArrowLeft } from "lucide-react";
-import { useAuth } from "@/lib/auth-context";
+import { useAuthentication } from "@/lib/auth-context";
 import { useToast } from "@/lib/toast-context";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { signIn } = useAuthentication();
   const { showToast } = useToast();
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLoginFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
     // Simulate login with unverified status to demonstrate the request
-    login({ isVerified: false });
+    signIn({ isAccountVerified: false });
     showToast("Вы успешно вошли", "success");
     router.push("/profile");
   };
@@ -40,7 +40,7 @@ export default function LoginPage() {
             Войдите в свой аккаунт Полки, чтобы продолжить.
           </p>
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <form className="space-y-4" onSubmit={handleLoginFormSubmit}>
             <div>
               <label className="block text-xs font-semibold text-apple-text-secondary uppercase tracking-wider mb-2 ml-1">
                 Email

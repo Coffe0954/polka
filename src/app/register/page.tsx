@@ -6,18 +6,18 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { ArrowLeft } from "lucide-react";
-import { useAuth } from "@/lib/auth-context";
+import { useAuthentication } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/lib/toast-context";
 
 export default function RegisterPage() {
-  const { login } = useAuth();
+  const { signIn } = useAuthentication();
   const router = useRouter();
 
   const { showToast } = useToast();
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    login();
+  const handleRegistrationFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    signIn();
     showToast("Добро пожаловать в Полку!", "success");
     router.push("/profile");
   };
@@ -39,7 +39,7 @@ export default function RegisterPage() {
             Присоединяйтесь к сообществу Полки сегодня.
           </p>
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <form className="space-y-4" onSubmit={handleRegistrationFormSubmit}>
             <div>
               <label className="block text-xs font-semibold text-apple-text-secondary uppercase tracking-wider mb-2 ml-1">
                 Имя
