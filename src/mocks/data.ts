@@ -11,14 +11,14 @@ import {
 import { Category, Product } from '../types';
 
 export const CATEGORIES: Category[] = [
-  { id: '1', name: 'Электроника', icon: Smartphone },
-  { id: '2', name: 'Недвижимость', icon: Home },
-  { id: '3', name: 'Транспорт', icon: Car },
-  { id: '4', name: 'Работа', icon: Laptop },
-  { id: '5', name: 'Дом и сад', icon: Armchair },
-  { id: '6', name: 'Личные вещи', icon: Watch },
-  { id: '7', name: 'Детские товары', icon: Baby },
-  { id: '8', name: 'Хобби и отдых', icon: Dumbbell },
+  { id: 'electronics', name: 'Электроника', icon: Smartphone },
+  { id: 'realty', name: 'Недвижимость', icon: Home },
+  { id: 'transport', name: 'Транспорт', icon: Car },
+  { id: 'jobs', name: 'Работа', icon: Laptop },
+  { id: 'home', name: 'Дом и сад', icon: Armchair },
+  { id: 'personal', name: 'Личные вещи', icon: Watch },
+  { id: 'kids', name: 'Детские товары', icon: Baby },
+  { id: 'hobby', name: 'Хобби и отдых', icon: Dumbbell },
 ];
 
 export const MOCK_PRODUCTS: Product[] = [
