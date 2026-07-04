@@ -18,19 +18,20 @@ export function CategoryGrid({ categories }: CategoryGridProps) {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.05 }}
+            className="h-full"
           >
             <Link
               href={`/category/${category.id}`}
-              className="flex flex-col items-center justify-center p-4 bg-white rounded-apple shadow-sm hover:shadow-xl hover:shadow-black/5 transition-all duration-300 group relative border border-transparent hover:border-gray-100"
+              className="flex flex-col items-center justify-center p-4 bg-white rounded-apple shadow-sm hover:shadow-xl hover:shadow-black/5 transition-all duration-300 group relative border border-transparent hover:border-gray-100 h-full min-h-[140px]"
             >
               <motion.div
-                whileHover={{ scale: 1.15 }}
+                whileHover={{ scale: 1.1 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                className="w-12 h-12 flex items-center justify-center bg-apple-bg rounded-2xl mb-2 group-hover:bg-apple-blue group-hover:text-white transition-colors duration-300"
+                className="w-12 h-12 flex items-center justify-center bg-gray-50 rounded-2xl mb-3 group-hover:bg-gray-100 text-apple-text transition-colors duration-300"
               >
-                <Icon size={24} />
+                <Icon size={24} strokeWidth={2} />
               </motion.div>
-              <span className="text-[13px] font-medium text-apple-text-secondary group-hover:text-apple-text text-center transition-colors">
+              <span className="text-[13px] font-semibold text-apple-text-secondary group-hover:text-apple-text text-center transition-colors leading-tight px-1">
                 {category.name}
               </span>
             </Link>
