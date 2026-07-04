@@ -7,9 +7,12 @@ import { Upload, ChevronRight, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { useToast } from "@/lib/toast-context";
 
 export default function CreateAdPage() {
   const { isLoggedIn } = useAuth();
+  const { showToast } = useToast();
   const router = useRouter();
 
   useEffect(() => {
@@ -20,18 +23,49 @@ export default function CreateAdPage() {
 
   const [step, setStep] = useState(1);
 
+  const handleNext = () => {
+    if (step < 3) {
+      setStep(step + 1);
+    } else {
+      showToast("Объявление успешно опубликовано!", "success");
+      router.push("/profile");
+    }
+  };
+
   return (
     <div className="py-8 md:py-12 bg-apple-bg min-h-[calc(100vh-80px)]">
       <Container className="max-w-[800px]">
-        <div className="apple-card p-8 md:p-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="apple-card p-8 md:p-12"
+        >
           <header className="mb-10 text-center">
-            <h1 className="text-3xl font-bold mb-2">Разместить объявление</h1>
-            <p className="text-apple-text-secondary">
-              Шаг {step} из 3: Основная информация
+            <h1 className="text-3xl font-bold mb-2 tracking-tight">Разместить объявление</h1>
+            <div className="flex justify-center gap-2 mt-4">
+              {[1, 2, 3].map((s) => (
+                <div
+                  key={s}
+                  className={`h-1.5 w-12 rounded-full transition-all duration-500 ${
+                    s <= step ? "bg-apple-blue" : "bg-gray-200"
+                  }`}
+                />
+              ))}
+            </div>
+            <p className="text-apple-text-secondary mt-4 text-sm font-medium">
+              Шаг {step} из 3: {step === 1 ? "Основная информация" : step === 2 ? "Подробности" : "Контакты"}
             </p>
           </header>
 
-          <div className="space-y-8">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-8"
+            >
             {/* Photo Upload Zone */}
             <div className="space-y-4">
               <label className="text-sm font-semibold text-apple-text uppercase tracking-wider">
@@ -100,14 +134,29 @@ export default function CreateAdPage() {
               </div>
             </div>
 
-            <div className="pt-6">
-              <Button size="lg" className="w-full gap-2 rounded-2xl">
-                Продолжить
+            <div className="pt-6 flex gap-4">
+              {step > 1 && (
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="flex-1 rounded-2xl"
+                  onClick={() => setStep(step - 1)}
+                >
+                  Назад
+                </Button>
+              )}
+              <Button
+                size="lg"
+                className="flex-[2] gap-2 rounded-2xl"
+                onClick={handleNext}
+              >
+                {step === 3 ? "Опубликовать" : "Продолжить"}
                 <ChevronRight size={20} />
               </Button>
             </div>
-          </div>
-        </div>
+          </motion.div>
+          </AnimatePresence>
+        </motion.div>
       </Container>
     </div>
   );

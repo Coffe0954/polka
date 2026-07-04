@@ -8,14 +8,17 @@ import { Input } from "@/components/ui/Input";
 import { ArrowLeft } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/lib/toast-context";
 
 export default function RegisterPage() {
   const { login } = useAuth();
   const router = useRouter();
 
+  const { showToast } = useToast();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     login();
+    showToast("Добро пожаловать в Полку!", "success");
     router.push("/profile");
   };
 

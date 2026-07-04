@@ -7,16 +7,19 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { ArrowLeft } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
+import { useToast } from "@/lib/toast-context";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const { showToast } = useToast();
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Simulate login with unverified status to demonstrate the request
     login({ isVerified: false });
+    showToast("Вы успешно вошли", "success");
     router.push("/profile");
   };
 
