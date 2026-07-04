@@ -28,15 +28,15 @@ export function Footer() {
           <div>
             <h4 className="font-semibold text-apple-text mb-4">Поддержка</h4>
             <ul className="space-y-2 text-sm text-apple-text-secondary">
-              <li><Link href="#" className="hover:text-apple-blue transition-colors">Помощь</Link></li>
-              <li><Link href="#" className="hover:text-apple-blue transition-colors">Правила</Link></li>
-              <li><Link href="#" className="hover:text-apple-blue transition-colors">Безопасность</Link></li>
+              <li><Link href="/help" className="hover:text-apple-blue transition-colors">Помощь</Link></li>
+              <li><Link href="/rules" className="hover:text-apple-blue transition-colors">Правила</Link></li>
+              <li><Link href="/safety" className="hover:text-apple-blue transition-colors">Безопасность</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold text-apple-text mb-4">Компания</h4>
             <ul className="space-y-2 text-sm text-apple-text-secondary">
-              <li><Link href="#" className="hover:text-apple-blue transition-colors">О нас</Link></li>
+              <li><Link href="/about" className="hover:text-apple-blue transition-colors">О нас</Link></li>
               <li><Link href="#" className="hover:text-apple-blue transition-colors">Блог</Link></li>
               <li><Link href="#" className="hover:text-apple-blue transition-colors">Карьера</Link></li>
             </ul>
@@ -45,8 +45,8 @@ export function Footer() {
         <div className="pt-8 border-t border-gray-50 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-apple-text-secondary">
           <p>© {currentYear} Полка. Все права защищены.</p>
           <div className="flex gap-6">
-            <Link href="#" className="hover:text-apple-text transition-colors">Конфиденциальность</Link>
-            <Link href="#" className="hover:text-apple-text transition-colors">Условия</Link>
+            <Link href="/privacy" className="hover:text-apple-text transition-colors">Конфиденциальность</Link>
+            <Link href="/terms" className="hover:text-apple-text transition-colors">Условия</Link>
           </div>
         </div>
       </Container>
